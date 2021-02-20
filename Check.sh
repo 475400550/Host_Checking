@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "------------------------------------------------------"
 if [ "$(grep 'install cramfs /bin/true' /etc/modprobe.d/CIS.conf | wc -l)"  -ge 1 ];then
 	echo "【通过】确保已禁用cramfs文件系统的挂载"
 else
@@ -200,4 +201,59 @@ if [ "$(grep 'net.ipv6.conf.all.accept_redirects = 0' /etc/sysctl.conf | wc -l)"
 	fi
 else
 	echo "【未通过】确保不接受IPv6重定向"
+fi
+
+
+if [ "$(grep '* hard core 0' /etc/security/limits.conf | wc -l)"  -ge 1 ];then
+	echo "【通过】确保核心转储受到限制"
+else
+	echo "【未通过】确保核心转储受到限制"
+fi
+
+if [ "$(grep 'kernel.randomize_va_space = 2'  /etc/sysctl.conf | wc -l)"  -ge 1 ];then
+	echo "【通过】确保启用了地址空间布局随机化（ASLR）"
+else
+	echo "【未通过】确保启用了地址空间布局随机化（ASLR）"
+fi
+
+if [ "$(grep 'net.ipv4.ip_forward = 0'  /etc/sysctl.conf | wc -l)"  -ge 1 ];then
+	echo "【通过】确保禁用IP转发 "
+else
+	echo "【未通过】确保禁用IP转发"
+fi
+
+if [ "$(grep 'net.ipv4.tcp_syncookies = 1' /etc/sysctl.conf | wc -l)"  -ge 1 ];then
+	echo "【通过】确保启用了TCP SYN Cookies"
+else
+	echo "【未通过】确保启用了TCP SYN Cookies"
+fi
+
+if [ "$(grep -i Protocol /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "2" ];then
+    echo "【通过】确保SSH协议设置为2"
+else
+	echo "【未通过】确保SSH协议设置为2"
+fi
+
+if [ "$(grep -i MaxAuthTries /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "4" ];then
+	echo "【通过】确保SSH MaxAuthTries设置为4或更低"
+else
+	echo "【未通过】确保SSH MaxAuthTries设置为4或更低"
+fi
+
+if [ "$(grep -i HostbasedAuthentication /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "no" ];then
+	echo "【通过】确保已禁用SSH基于主机的身份验证"
+else
+	echo "【未通过】确保已禁用SSH基于主机的身份验证"
+fi
+
+if [ "$(grep -i PermitEmptyPasswords /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "no" ];then
+	echo "【通过】确保已禁用SSH空密码登录"
+else
+	echo "【未通过】确保已禁用SSH空密码登录"
+fi
+
+if [ "$(grep 'TMOUT=600' /etc/profile | wc -l)"  -ge 1 ];then
+	echo "【通过】确保默认用户shell超时为900秒或更短"
+else
+	echo "【未通过】确保默认用户shell超时为900秒或更短"
 fi
