@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "------------------------------------------------------"
 if [ "$(grep 'install cramfs /bin/true' /etc/modprobe.d/CIS.conf | wc -l)"  -ge 1 ];then
-	echo "【通过】确保已禁用cramfs文件系统的挂载"
+	echo "【通过】确保禁用cramfs文件系统的挂载"
 else
 	echo "【未通过】确保已禁用cramfs文件系统的挂载"
 fi
