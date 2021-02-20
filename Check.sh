@@ -1,6 +1,6 @@
 #!/bin/bash
-if [ "$(grep "ucredit = -1" /etc/security/pwquality.conf | grep -v '^#' | wc -l)" != 1 ];then
-	echo "口令复杂度满足要求"
+if [ "$(grep 'install cramfs /bin/true' /etc/modprobe.d/CIS.conf | wc -l)"  -ge 1 ];then
+	echo "安装了cramfs"
 else
-	echo "失败"
+	echo "未安装"
 fi
