@@ -102,15 +102,102 @@ else
 fi
 
 if [ "$(grep -i ClientAliveInterval /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "300" ];then
-    echo "【通过】确保已配置SSH空闲超时间隔 "
+	if [ "$(grep -i ClientAliveCountMax /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "0" ];then
+		echo "【通过】确保已配置SSH空闲超时间隔 "
+	else
+		echo "【未通过】确保已配置SSH空闲超时间隔 "
+	fi
 else
 	echo "【未通过】确保已配置SSH空闲超时间隔 "
 fi
 
-if [ "$(grep -i ClientAliveCountMax /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "0" ];then
-    echo "【通过】确保已配置SSH空闲超时间隔 "
+if [ "$(grep 'net.ipv4.conf.all.send_redirects = 0' /etc/sysctl.conf | wc -l)"  -ge 1 ];then
+	if [ "$(grep 'net.ipv4.conf.all.send_redirects = 0' /etc/sysctl.conf | wc -l)"  -ge 1 ];then
+		echo "【通过】确保禁用了数据包重定向发送"
+	else
+		echo "【未通过】确保禁用了数据包重定向发送"
+	fi
 else
-	echo "【未通过】确保已配置SSH空闲超时间隔 "
+	echo "【未通过】确保禁用了数据包重定向发送"
 fi
 
 
+if [ "$(grep 'net.ipv4.conf.all.send_redirects = 0' /etc/sysctl.conf | wc -l)"  -ge 1 ];then
+	if [ "$(grep 'net.ipv4.conf.all.send_redirects = 0' /etc/sysctl.conf | wc -l)"  -ge 1 ];then
+	echo "【通过】确保禁用了数据包重定向发送"
+	else
+		echo "【未通过】确保禁用了数据包重定向发送"
+	fi	
+else
+	echo "【未通过】确保禁用了数据包重定向发送"
+fi
+
+if [ "$(grep 'net.ipv4.conf.all.accept_source_route = 0' /etc/sysctl.conf | wc -l)"  -ge 1 ];then
+	if [ "$(grep 'net.ipv4.conf.default.accept_source_route = 0' /etc/sysctl.conf | wc -l)"  -ge 1 ];then
+		echo "【通过】确保不接受源路由数据包"
+	else
+		echo "【未通过】确保不接受源路由数据包"
+	fi
+else
+	echo "【未通过】确保不接受源路由数据包"
+fi
+
+if [ "$(grep 'net.ipv4.conf.all.accept_redirects = 0' /etc/sysctl.conf | wc -l)"  -ge 1 ];then
+	if [ "$(grep 'net.ipv4.conf.default.accept_redirects = 0' /etc/sysctl.conf | wc -l)"  -ge 1 ];then
+		echo "【通过】确保不接受ICMP重定向"
+	else
+		echo "【未通过】确保不接受ICMP重定向"
+	fi
+else
+	echo "【未通过】确保不接受ICMP重定向"
+fi
+
+if [ "$(grep 'net.ipv4.conf.all.secure_redirects = 0' /etc/sysctl.conf | wc -l)"  -ge 1 ];then
+	if [ "$(grep 'net.ipv4.conf.default.secure_redirects = 0' /etc/sysctl.conf | wc -l)"  -ge 1 ];then
+		echo "【通过】确保不接受secure ICMP重定向"
+	else
+		echo "【未通过】确保不接受secure ICMP重定向"
+	fi
+else
+	echo "【未通过】确保不接受secure ICMP重定向"
+fi
+
+if [ "$(grep 'net.ipv4.conf.all.log_martians = 1' /etc/sysctl.conf | wc -l)"  -ge 1 ];then
+	if [ "$(grep 'net.ipv4.conf.default.log_martians = 1' /etc/sysctl.conf | wc -l)"  -ge 1 ];then
+		echo "【通过】确保记录了可疑数据包"
+	else
+		echo "【未通过】确保记录了可疑数据包"
+	fi
+else
+	echo "【未通过】确保记录了可疑数据包"
+fi
+
+if [ "$(grep 'net.ipv4.conf.all.rp_filter = 1' /etc/sysctl.conf | wc -l)"  -ge 1 ];then
+	if [ "$(grep 'net.ipv4.conf.default.rp_filter = 1' /etc/sysctl.conf | wc -l)"  -ge 1 ];then
+		echo "【通过】确保启用了反向路径过滤"
+	else
+		echo "【未通过】确保启用了反向路径过滤"
+	fi
+else
+	echo "【未通过】确保启用了反向路径过滤"
+fi
+
+if [ "$(grep 'net.ipv6.conf.all.accept_ra = 0' /etc/sysctl.conf | wc -l)"  -ge 1 ];then
+	if [ "$(grep 'net.ipv6.conf.default.accept_ra = 0' /etc/sysctl.conf | wc -l)"  -ge 1 ];then
+		echo "【通过】确保不接受IPv6路由器通告"
+	else
+		echo "【未通过】确保不接受IPv6路由器通告"
+	fi
+else
+	echo "【未通过】确保不接受IPv6路由器通告"
+fi
+
+if [ "$(grep 'net.ipv6.conf.all.accept_redirects = 0' /etc/sysctl.conf | wc -l)"  -ge 1 ];then
+	if [ "$(grep 'net.ipv6.conf.default.accept_redirects = 0' /etc/sysctl.conf | wc -l)"  -ge 1 ];then
+		echo "【通过】确保不接受IPv6重定向"
+	else
+		echo "【未通过】确保不接受IPv6重定向"
+	fi
+else
+	echo "【未通过】确保不接受IPv6重定向"
+fi
