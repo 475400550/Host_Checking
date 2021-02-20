@@ -113,8 +113,4 @@ else
 	echo "【未通过】确保已配置SSH空闲超时间隔 "
 fi
 
-if [ "$(grep -i test /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "0" ];then
-    echo "【通过】test "
-else
-	echo "【未通过】gresr "
-fi
+
