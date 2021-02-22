@@ -60,7 +60,7 @@ echo "1 初始配置 -> 1.2 配置软件更新----------------------------------
 if [ "$(grep -i 'gpgcheck=1' /etc/yum.conf | grep -v '^#'| wc -l)" -ge 1 ];then
 	echo "-----【通过】（1.2.3）确保gpgcheck已全局激活（与腾讯检测结果不同）"
 else
-	echo "-----【未通过】（1.2.3）确保gpgcheck已全局激活（与腾讯检测结果不同）"
+	echo "-----【未通过】（1.2.3）确保gpgcheck已全局激活"
 fi
 
 echo -e "\n-------------------------------------------------------------------------"
@@ -118,98 +118,6 @@ if [ "$(systemctl status squid | grep 'active (running)' | wc -l)"  -lt 1 ];then
 	echo "------【通过】（2.2.14）确保未启用HTTP代理服务"
 else
 	echo "------【未通过】（2.2.14）确保未启用HTTP代理服务"
-fi
-
-echo -e "\n-------------------------------------------------------------------"
-echo "3 网络配置 -> 3.4 处理不常用的网络协议----------------------------------"
-if [ "$(grep 'install dccp /bin/true' /etc/modprobe.d/CIS.conf | wc -l)"  -ge 1 ];then
-	echo "------【通过】（3.4.1）确保禁用DCCP"
-else
-	echo "------【未通过】（3.4.1）确保禁用DCCP"
-fi
-
-if [ "$(grep 'install sctp /bin/true' /etc/modprobe.d/CIS.conf | wc -l)"  -ge 1 ];then
-	echo "------【通过】（3.4.2）确保已禁用SCTP"
-else
-	echo "------【未通过】（3.4.2）确保已禁用SCTP"
-fi
-
-if [ "$(grep 'install rds /bin/true' /etc/modprobe.d/CIS.conf | wc -l)"  -ge 1 ];then
-	echo "------【通过】确保禁用RDS"
-else
-	echo "------【未通过】确保禁用RDS"
-fi
-
-if [ "$(grep 'install tipc /bin/true' /etc/modprobe.d/CIS.conf | wc -l)"  -ge 1 ];then
-	echo "------【通过】确保禁用TIPC"
-else
-	echo "------【未通过】确保禁用TIPC"
-fi
-
-echo -e "\n-------------------------------------------------------------------------"
-echo "5 认证授权及审计 -> 5.2 配置SSH服务-------------------------------------------"
-if [ "$(grep -i LogLevel /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "INFO" ];then
-    echo "------【通过】（5.2.5）确保SSH LogLevel设置为INFO"
-else
-	echo "------【未通过】（5.2.5）确保SSH LogLevel设置为INFO"
-fi
-
-if [ "$(grep -i X11Forwarding /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "no" ];then
-    echo "------【通过】（5.2.6）确保禁用SSH X11转发"
-else
-	echo "------【未通过】（5.2.6）确保禁用SSH X11转发"
-fi
-
-if [ "$(grep -i MaxAuthTries /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "4" ];then
-	echo "------【通过】（5.2.7）确保SSH MaxAuthTries设置为4或更低"
-else
-	echo "------【未通过】（5.2.7）确保SSH MaxAuthTries设置为4或更低"
-fi
-
-if [ "$(grep -i IgnoreRhosts /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "yes" ];then
-    echo "------【通过】（5.2.8）确保已启用SSH IgnoreRhosts"
-else
-	echo "------【未通过】（5.2.8）确保已启用SSH IgnoreRhosts"
-fi
-
-if [ "$(grep -i HostbasedAuthentication /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "no" ];then
-	echo "------【通过】（5.2.9）确保已禁用SSH基于主机的身份验证"
-else
-	echo "------【未通过】（5.2.9）确保已禁用SSH基于主机的身份验证"
-fi
-
-if [ "$(grep -i PermitRootLogin /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "no" ];then
-	echo "------【通过】（5.2.10）确保禁用SSH root登录"
-else
-	echo "------【未通过】（5.2.10）确保禁用SSH root登录"
-fi
-
-if [ "$(grep -i PermitEmptyPasswords /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "no" ];then
-	echo "------【通过】（5.2.11）确保已禁用SSH空密码登录"
-else
-	echo "------【未通过】（5.2.11）确保已禁用SSH空密码登录"
-fi
-
-if [ "$(grep -i PermitUserEnvironment /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "no" ];then
-    echo "------【通过】（5.2.12）确保禁用SSH PermitUserEnvironment"
-else
-	echo "------【未通过】（5.2.12）确保禁用SSH PermitUserEnvironment"
-fi
-
-if [ "$(grep -i ClientAliveInterval /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "300" ];then
-	if [ "$(grep -i ClientAliveCountMax /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "0" ];then
-		echo "------【通过】（5.2.16）确保已配置SSH空闲超时间隔 "
-	else
-		echo "------【未通过】（5.2.16）确保已配置SSH空闲超时间隔 "
-	fi
-else
-	echo "------【未通过】（5.2.16）确保已配置SSH空闲超时间隔 "
-fi
-
-if [ "$(grep -i LoginGraceTime /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "60s" ];then
-    echo "------【通过】（5.2.17）确保SSH LoginGraceTime设置为一分钟或更短"
-else
-	echo "------【未通过】（5.2.17）确保SSH LoginGraceTime设置为一分钟或更短"
 fi
 
 echo -e "\n-------------------------------------------------------------------------"
@@ -315,7 +223,109 @@ else
 	echo "------【未通过】确保不接受IPv6重定向"
 fi
 
+echo -e "\n-------------------------------------------------------------------"
+echo "3 网络配置 -> 3.4 处理不常用的网络协议----------------------------------"
+if [ "$(grep 'install dccp /bin/true' /etc/modprobe.d/CIS.conf | wc -l)"  -ge 1 ];then
+	echo "------【通过】（3.4.1）确保禁用DCCP"
+else
+	echo "------【未通过】（3.4.1）确保禁用DCCP"
+fi
 
+if [ "$(grep 'install sctp /bin/true' /etc/modprobe.d/CIS.conf | wc -l)"  -ge 1 ];then
+	echo "------【通过】（3.4.2）确保已禁用SCTP"
+else
+	echo "------【未通过】（3.4.2）确保已禁用SCTP"
+fi
+
+if [ "$(grep 'install rds /bin/true' /etc/modprobe.d/CIS.conf | wc -l)"  -ge 1 ];then
+	echo "------【通过】确保禁用RDS"
+else
+	echo "------【未通过】确保禁用RDS"
+fi
+
+if [ "$(grep 'install tipc /bin/true' /etc/modprobe.d/CIS.conf | wc -l)"  -ge 1 ];then
+	echo "------【通过】确保禁用TIPC"
+else
+	echo "------【未通过】确保禁用TIPC"
+fi
+
+echo -e "\n-------------------------------------------------------------------------"
+echo "5 认证授权及审计 -> 5.2 配置SSH服务-------------------------------------------"
+if [ "$(sshd -T | grep -E '^\s*(allow|deny)(users|groups)\s+\S+' | wc -l)"  -ge 1 ];then
+	echo "------【通过】（5.2.4）确保SSH访问受限"
+else
+	echo "------【未通过】（5.2.4）确保SSH访问受限"
+fi
+
+if [ "$(grep -i LogLevel /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "INFO" ];then
+    echo "------【通过】（5.2.5）确保SSH LogLevel设置为INFO"
+else
+	echo "------【未通过】（5.2.5）确保SSH LogLevel设置为INFO"
+fi
+
+if [ "$(grep -i X11Forwarding /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "no" ];then
+    echo "------【通过】（5.2.6）确保禁用SSH X11转发"
+else
+	echo "------【未通过】（5.2.6）确保禁用SSH X11转发"
+fi
+
+if [ "$(grep -i MaxAuthTries /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "4" ];then
+	echo "------【通过】（5.2.7）确保SSH MaxAuthTries设置为4或更低"
+else
+	echo "------【未通过】（5.2.7）确保SSH MaxAuthTries设置为4或更低"
+fi
+
+if [ "$(grep -i IgnoreRhosts /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "yes" ];then
+    echo "------【通过】（5.2.8）确保已启用SSH IgnoreRhosts"
+else
+	echo "------【未通过】（5.2.8）确保已启用SSH IgnoreRhosts"
+fi
+
+if [ "$(grep -i HostbasedAuthentication /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "no" ];then
+	echo "------【通过】（5.2.9）确保已禁用SSH基于主机的身份验证"
+else
+	echo "------【未通过】（5.2.9）确保已禁用SSH基于主机的身份验证"
+fi
+
+if [ "$(grep -i PermitRootLogin /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "no" ];then
+	echo "------【通过】（5.2.10）确保禁用SSH root登录"
+else
+	echo "------【未通过】（5.2.10）确保禁用SSH root登录"
+fi
+
+if [ "$(grep -i PermitEmptyPasswords /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "no" ];then
+	echo "------【通过】（5.2.11）确保已禁用SSH空密码登录"
+else
+	echo "------【未通过】（5.2.11）确保已禁用SSH空密码登录"
+fi
+
+if [ "$(grep -i PermitUserEnvironment /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "no" ];then
+    echo "------【通过】（5.2.12）确保禁用SSH PermitUserEnvironment"
+else
+	echo "------【未通过】（5.2.12）确保禁用SSH PermitUserEnvironment"
+fi
+
+if [ "$(grep 'MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256' /etc/ssh/sshd_config | grep -v '^#' | wc -l)"  -ge 1 ];then
+    echo "------【通过】（5.2.14）确保SSH使用了强MAC算法"
+else
+	echo "------【未通过】（5.2.14）确保SSH使用了强MAC算法"
+fi
+
+if [ "$(grep -i ClientAliveInterval /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "300" ];then
+	if [ "$(grep -i ClientAliveCountMax /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "0" ];then
+		echo "------【通过】（5.2.16）确保已配置SSH空闲超时间隔 "
+	else
+		echo "------【未通过】（5.2.16）确保已配置SSH空闲超时间隔 "
+	fi
+else
+	echo "------【未通过】（5.2.16）确保已配置SSH空闲超时间隔 "
+fi
+
+if [ "$(grep -i LoginGraceTime /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "60s" ];then
+    echo "------【通过】（5.2.17）确保SSH LoginGraceTime设置为一分钟或更短"
+else
+	echo "------【未通过】（5.2.17）确保SSH LoginGraceTime设置为一分钟或更短"
+fi
 
 if [ "$(grep -i Protocol /etc/ssh/sshd_config | grep -v '^#' |awk '{print $2}')" = "2" ];then
     echo "------【通过】确保SSH协议设置为2"
@@ -323,9 +333,20 @@ else
 	echo "------【未通过】确保SSH协议设置为2"
 fi
 
+if [ "$(grep pam_faillock.so /etc/pam.d/password-auth /etc/pam.d/system-auth | grep pam_faillock.so | grep  "deny=.*3"| grep "even_deny_root" | grep "fail_interval=900" | grep "unlock_time=900" | wc -l)" -ge 1 ];then
+	echo "-----【通过】（5.3.2）确保配置了密码尝试失败的锁定"
+else
+	echo "-----【未通过】（5.3.2）确保配置了密码尝试失败的锁定"
+fi
 
 if [ "$(grep 'TMOUT=600' /etc/profile | wc -l)"  -ge 1 ];then
 	echo "------【通过】（5.4.4）确保默认用户shell超时为900秒或更短"
 else
 	echo "------【未通过】（5.4.4）确保默认用户shell超时为900秒或更短"
+fi
+
+if [ "$(grep -Ev '^\s*umask\s+\s*(0[0-7][2-7]7|[0-7][2-7]7|u=(r?|w?|x?)(r?|w?|x?)(r?|w?|x?),g=(r?x?|x?r?),o=)\s*(\s*#.*)?$' /etc/profile /etc/profile.d/*.sh /etc/bashrc | grep -E '(^|^[^#]*)umask' | wc -l)"  -lt 1 ];then
+	echo "------【通过】（5.4.5）确保默认用户umask限制为027或更高"
+else
+	echo "------【未通过】（5.4.5）确保默认用户umask限制为027或更高"
 fi
