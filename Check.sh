@@ -65,7 +65,7 @@ fi
 
 echo -e "\n-------------------------------------------------------------------------"
 echo "1 初始配置 -> 1.5 加固Boot设置----------------------------------"
-if["$(grep "^\s*GRUB2_PASSWORD" /boot/grub2/grub.cfg | wc -l)" -ge 1];then
+if["$(grep '^\s*GRUB2_PASSWORD' /boot/grub2/grub.cfg | wc -l)" -ge 1];then
 	echo "【通过】（1.5.1）确保设置了bootloader密码"
 else
 	echo "【未通过】（1.5.1）确保设置了bootloader密码"
