@@ -71,14 +71,13 @@ if["$(yum list installed aide | wc -l)" -ge 1];then
 else
 	echo "【未通过】（1.4.1）确保安装了AIDE"
 fi
-EOF
 
 if["$(grep -i aide /etc/crontab | wc -l)" -ge 1];then
 	echo "【通过】（1.4.2）确保定期检查文件系统完整性"
 else
 	echo "【未通过】（1.4.2）确保定期检查文件系统完整性"
 fi
-
+EOF
 echo -e "\n-------------------------------------------------------------------------"
 echo "1 初始配置 -> 1.5 加固Boot设置----------------------------------"
 if["$(grep "^\s*GRUB2_PASSWORD" /boot/grub2/grub.cfg | wc -l)" -ge 1];then
