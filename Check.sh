@@ -64,14 +64,28 @@ else
 fi
 
 echo -e "\n-------------------------------------------------------------------------"
+echo "1 初始配置 -> 1.4 文件系统完整性检查----------------------------------"
+if ["$(yum list installed aide | wc -l)" -ge 1];then
+	echo "【通过】（1.4.1）确保安装了AIDE"
+else
+	echo "【未通过】（1.4.1）确保安装了AIDE"
+fi
+
+if ["$(grep -i aide /etc/crontab | wc -l)" -ge 1];then
+	echo "【通过】（1.4.2）确保定期检查文件系统完整性"
+else
+	echo "【未通过】（1.4.2）确保定期检查文件系统完整性"
+fi
+
+echo -e "\n-------------------------------------------------------------------------"
 echo "1 初始配置 -> 1.5 加固Boot设置----------------------------------"
-if["$(grep '^\s*GRUB2_PASSWORD' /boot/grub2/grub.cfg | wc -l)" -ge 1];then
+if ["$(grep 'GRUB2_PASSWORD' /boot/grub2/grub.cfg | wc -l)" -ge 1];then
 	echo "【通过】（1.5.1）确保设置了bootloader密码"
 else
 	echo "【未通过】（1.5.1）确保设置了bootloader密码"
 fi
 
-if["$(stat /boot/grub2/grub.cfg | grep 0600 | wc -l)" -ge 1];then
+if ["$(stat /boot/grub2/grub.cfg | grep 0600 | wc -l)" -ge 1];then
 	echo "【通过】（1.5.2）确保配置了bootloader配置的权限"
 else
 	echo "【未通过】（1.5.2）确保配置了bootloader配置的权限"
